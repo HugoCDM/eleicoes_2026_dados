@@ -1,0 +1,7 @@
+@"
+teste.parquet
+csv/votos_2026_rj.csv
+"@ | Out-File -Encoding utf8 .gitignore
+bu/
+csv/
+ea18/
