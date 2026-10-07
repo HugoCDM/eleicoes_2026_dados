@@ -2,6 +2,16 @@
 
 Scripts para baixar, auditar e processar arquivos de urna das eleicoes 2026 no RJ a partir dos dados publicados pelo TSE.
 
+## Acesso Direto aos Dados
+
+Se voce so quer usar a base final ja processada, baixe o arquivo Parquet no Hugging Face:
+
+```text
+https://huggingface.co/datasets/HugoCDM/tse_dados_2026_rj/resolve/main/votos_dados_2026_rj.parquet
+```
+
+Esse arquivo contem os dados finais de votos ja consolidados. O fluxo abaixo serve para quem quiser reproduzir o processo do zero, baixando os arquivos do TSE passo a passo ate gerar localmente o `csv/votos_2026_rj.csv`.
+
 ## Requisitos
 
 - Python 3.10 ou superior
@@ -38,7 +48,7 @@ tse_2026_rj/
     erros_bu_2026_rj.csv
 ```
 
-## Ordem Recomendada
+## Gerar os Dados Passo a Passo
 
 Execute os scripts nesta ordem:
 
@@ -49,33 +59,13 @@ python tse_2026_rj/04_inexistentes.py
 python tse_2026_rj/02_bu_votos.py
 ```
 
-O script `00_decodificar_bu.py` e um exemplo pontual de decodificacao de um BU especifico, nao faz parte do fluxo completo.
+Ao final do processo, o arquivo principal gerado sera:
 
-## Scripts
-
-### `00_decodificar_bu.py`
-
-Decodifica um unico arquivo de boletim de urna (`.dat`) usando a especificacao ASN.1 `bu_v2.asn1`.
-
-Uso:
-
-```bash
-python tse_2026_rj/00_decodificar_bu.py
+```text
+csv/votos_2026_rj.csv
 ```
 
-Antes de rodar, ajuste no proprio arquivo:
-
-- O caminho de `bu_v2.asn1`, se necessario.
-- O arquivo `.dat` aberto no `with open(...)`.
-
-Entrada esperada:
-
-- `tse_2026_rj/bu_v2.asn1`
-- Um arquivo BU `.dat`, por exemplo `tse_2026_rj/bu/o03220rj5800902550024-bu.dat`
-
-Saida:
-
-- Imprime no terminal a estrutura `resultadosVotacaoPorEleicao` decodificada.
+## Scripts
 
 ### `01_ea16_ea18.py`
 
@@ -193,6 +183,32 @@ Quando usar:
 ### `reader.ipynb`
 
 Notebook auxiliar para exploracao manual dos dados. Use quando quiser abrir, inspecionar ou testar leituras de arquivos gerados pelos scripts. Ele nao substitui o fluxo principal dos scripts numerados.
+
+## Recurso Opcional
+
+### `00_decodificar_bu.py`
+
+Este script nao faz parte do passo a passo para gerar o CSV final. Ele e uma feature auxiliar para quem quiser entender como um boletim de urna (`.dat`) e decodificado com a especificacao ASN.1 `bu_v2.asn1`.
+
+Uso:
+
+```bash
+python tse_2026_rj/00_decodificar_bu.py
+```
+
+Antes de rodar, ajuste no proprio arquivo:
+
+- O caminho de `bu_v2.asn1`, se necessario.
+- O arquivo `.dat` aberto no `with open(...)`.
+
+Entrada esperada:
+
+- `tse_2026_rj/bu_v2.asn1`
+- Um arquivo BU `.dat`, por exemplo `tse_2026_rj/bu/o03220rj5800902550024-bu.dat`
+
+Saida:
+
+- Imprime no terminal a estrutura `resultadosVotacaoPorEleicao` decodificada.
 
 ## Arquivos Grandes e Gerados
 
